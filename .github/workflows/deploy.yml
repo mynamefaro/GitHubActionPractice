@@ -1,0 +1,25 @@
+name: Firebase Continuous Deployment
+
+on:
+  pull_request:
+    branches: [ master ]
+
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-node@master
+        with:
+          node-version: 23
+      - run: npm ci
+      - run: npm run build
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_EXOCYTOSIS_CELL_TRANSPORATION }}
+          channelId: live
+          projectId: exocytosis-cell-transporation
+
+          
